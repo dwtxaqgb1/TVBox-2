@@ -43,7 +43,7 @@ public class SeriesAdapter extends BaseQuickAdapter<VodInfo.VodSeries, BaseViewH
         @Override
         public void onFocusChange(View itemView, boolean hasFocus) {
                 if (hasFocus)
-                    itemView.animate().scaleX(1.05f).scaleY(1.05f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
+                    itemView.animate().scaleX(1.01f).scaleY(1.01f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
                 else
                     itemView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new BounceInterpolator()).start();
 
