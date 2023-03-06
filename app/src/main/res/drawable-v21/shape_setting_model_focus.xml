@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/color_theme_40">
+    <item>
+        <selector >
+            <item android:state_focused="true">
+                <shape android:shape="rectangle">
+                    <stroke android:width="@dimen/movie_recommend_item_frame_width" android:color="?attr/color_theme" />
+                    <solid android:color="?attr/color_theme" />
+                    <corners android:radius="@dimen/movie_recommend_item_radius" />
+                </shape>
+            </item>
+            <item android:state_selected="true">
+                <shape android:shape="rectangle">
+                    <stroke android:width="@dimen/movie_recommend_item_frame_width" android:color="?attr/color_theme" />
+                    <solid android:color="?attr/color_theme" />
+                    <corners android:radius="@dimen/movie_recommend_item_radius" />
+                </shape>
+            </item>
+            <item android:state_focused="false">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/white_10" />
+                    <corners android:radius="@dimen/movie_recommend_item_radius" />
+                </shape>
+            </item>
+            <item android:state_selected="false">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/white_10" />
+                    <corners android:radius="@dimen/movie_recommend_item_radius" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>
