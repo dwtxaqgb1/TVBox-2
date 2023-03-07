@@ -324,12 +324,12 @@ public class MusicDialog extends BaseDialog {
 
     public void getSongInfo(Context context, String path) {
         getLrc(new File(FileUtils.removeExt(path) + ".lrc"));
-        DriveFolderFile currentDrive = viewModel.getCurrentDrive();
         if (path.startsWith("http")) {
             //title = mediaPlayer.getTrackInfo().toString();
             title = "正在缓存歌曲....";
             artist = "";
             album = "";
+            mMusicLrc.setText("");
             songalbum = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_default_album);
             loadFinish = false;
             mMusicProgress.setProgress(0);
