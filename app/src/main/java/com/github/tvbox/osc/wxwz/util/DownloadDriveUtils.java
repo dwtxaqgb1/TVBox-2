@@ -186,8 +186,11 @@ public class DownloadDriveUtils {
             @Override
             public void right() {
                 if (isDone){
-
+                    if (thread!=null||thread.isAlive())
+                        thread.interrupt();
                 }else {
+                    if (thread!=null||thread.isAlive())
+                    thread.interrupt();
                     FileUtils.delFile(new File(root + "/tvbox/Download",FileUtils.getFileName(url)));
                 }
                 downloadDialog.dismiss();
