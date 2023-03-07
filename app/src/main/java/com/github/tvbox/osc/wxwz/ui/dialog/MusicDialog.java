@@ -201,6 +201,7 @@ public class MusicDialog extends BaseDialog {
     }
 
     public void playSong(Context context, String songPath, AbstractDriveViewModel viewModel, DriveFolderFile selectedItem) {
+
         songUrl = songPath;
         currentLyricIndex = 0;
         if (this.viewModel == null) {

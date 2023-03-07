@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -560,16 +561,16 @@ public class DriveActivity extends BaseActivity {
             toggleDelMode();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(RefreshEvent event) {
         if (event.type == RefreshEvent.TYPE_DRIVE_REFRESH) {
             drives = null;
             initData();
         }else if (event.type == RefreshEvent.TYPE_FILE_CHANGE){
-
-            viewModel.setCurrentDriveNote(selectedItemPath);
-            loadDriveData();
             adapter.notifyDataSetChanged();
+            driveFolderFileList.remove(filePostion);
+
         }
     }
 

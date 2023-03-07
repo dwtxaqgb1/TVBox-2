@@ -192,7 +192,7 @@ public class DownloadDriveUtils {
                         thread.interrupt();
                 }else {
                     if (thread!=null||thread.isAlive())
-                    thread.interrupt();
+                        thread.interrupt();
                     FileUtils.delFile(new File(root + "/tvbox/Download",FileUtils.getFileName(url)));
                 }
                 downloadDialog.dismiss();
