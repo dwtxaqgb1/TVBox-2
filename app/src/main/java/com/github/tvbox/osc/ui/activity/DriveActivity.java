@@ -5,7 +5,10 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -36,8 +39,15 @@ import com.github.tvbox.osc.viewmodel.drive.AbstractDriveViewModel;
 import com.github.tvbox.osc.viewmodel.drive.AlistDriveViewModel;
 import com.github.tvbox.osc.viewmodel.drive.LocalDriveViewModel;
 import com.github.tvbox.osc.viewmodel.drive.WebDAVDriveViewModel;
+import com.github.tvbox.osc.wxwz.ui.dialog.DownloadDialog;
 import com.github.tvbox.osc.wxwz.ui.dialog.MusicDialog;
+import com.github.tvbox.osc.wxwz.ui.dialog.SelectMoreDialog;
 import com.github.tvbox.osc.wxwz.util.ApkUtils;
+import com.github.tvbox.osc.wxwz.util.DownloadDriveUtils;
+import com.github.tvbox.osc.wxwz.util.DownloadSelect;
+import com.github.tvbox.osc.wxwz.util.FileUtils;
+import com.github.tvbox.osc.wxwz.util.okhttp.WebDav;
+import com.github.tvbox.osc.wxwz.util.okhttp.entity.DownloadInfo;
 import com.github.tvbox.quickjs.JSUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -55,6 +65,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -262,44 +275,10 @@ public class DriveActivity extends BaseActivity {
                                 }
                             });
                         }
-                    } else if (StorageDriveType.isMusicType(selectedItem.fileType)){
-                        DriveFolderFile currentDrive = viewModel.getCurrentDrive();
-                        if (currentDrive.getDriveType() == StorageDriveType.TYPE.LOCAL){
-                            MusicDialog musicDialog = new MusicDialog(DriveActivity.this);
-                            musicDialog.playSong(DriveActivity.this,currentDrive.name + selectedItem.getAccessingPathStr() + selectedItem.name,viewModel,selectedItem);
-
-                            musicDialog.show();
-                        }else {
-                            JsonObject config = currentDrive.getConfig();
-                            String targetPath = selectedItem.getAccessingPathStr() + selectedItem.name;
-
-                            MusicDialog musicDialog = new MusicDialog(DriveActivity.this);
-                            musicDialog.playSong(DriveActivity.this,config.get("url").getAsString() + targetPath,viewModel,selectedItem);
-
-                            musicDialog.show();
-                        }
-
-                        Toast.makeText(DriveActivity.this, "Music File", Toast.LENGTH_SHORT).show();
-                    }else if (StorageDriveType.isOtherType(selectedItem.fileType)){
-                        DriveFolderFile currentDrive = viewModel.getCurrentDrive();
-                        if (currentDrive.getDriveType() == StorageDriveType.TYPE.LOCAL){
-                            if (selectedItem.fileType.equals("APK")){
-                                ApkUtils.startInstallO(DriveActivity.this,currentDrive.name + selectedItem.getAccessingPathStr() + selectedItem.name);
-                            }
-                        }else if (currentDrive.getDriveType() == StorageDriveType.TYPE.WEBDAV){
-
-                        }
-                        if (selectedItem.fileType.equals("APK")){
-
-                        }
-                        Toast.makeText(DriveActivity.this, "Other Type", Toast.LENGTH_SHORT).show();
-                    }else if (StorageDriveType.isTextType(selectedItem.fileType)){
-                        Toast.makeText(DriveActivity.this, "Text Type", Toast.LENGTH_SHORT).show();
-                    }else if (StorageDriveType.isImageType(selectedItem.fileType)){
-                        Toast.makeText(DriveActivity.this, "Image Type", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(DriveActivity.this, "Media Unsupported ：" + selectedItem.fileType, Toast.LENGTH_SHORT).show();
+                        DownloadDriveUtils.downloadSelect(DriveActivity.this,viewModel,selectedItem);
                     }
+
                 }
             }
         });
@@ -585,6 +564,7 @@ public class DriveActivity extends BaseActivity {
             initData();
         }
     }
+
 
     @Override
     protected void onDestroy() {
