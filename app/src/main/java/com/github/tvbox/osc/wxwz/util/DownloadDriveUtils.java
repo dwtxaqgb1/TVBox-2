@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.github.tvbox.osc.bean.DriveFolderFile;
+import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.ui.activity.DriveActivity;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
 import com.github.tvbox.osc.util.StorageDriveType;
 import com.github.tvbox.osc.viewmodel.drive.AbstractDriveViewModel;
@@ -21,6 +23,8 @@ import com.github.tvbox.osc.wxwz.util.okhttp.WebDav;
 import com.github.tvbox.osc.wxwz.util.okhttp.entity.DownloadInfo;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -29,9 +33,12 @@ import java.util.Arrays;
 
 public class DownloadDriveUtils {
     public static AbstractDriveViewModel viewModelD = null;
+    public static DriveFolderFile selectedItemD = null;
+    public static boolean isDone = false;
     public static void downloadSelect(Activity activity,AbstractDriveViewModel viewModel , DriveFolderFile selectedItem){
         SelectMoreDialog<DownloadSelect.Select> dialog = new SelectMoreDialog<>(activity);
         viewModelD = viewModel;
+        selectedItemD = selectedItem;
         DriveFolderFile currentDrive = viewModel.getCurrentDrive();
         String[] typeName = DownloadSelect.getTypeNames();
         DownloadSelect.Select[] selects = DownloadSelect.Select.values();
@@ -45,6 +52,9 @@ public class DownloadDriveUtils {
                     dialog.dismiss();
                 }else if (value == DownloadSelect.Select.DOWNLOAD){
                     downloadFile(activity,currentDrive,selectedItem);
+                    dialog.dismiss();
+                }else if (value == DownloadSelect.Select.DELETE){
+                    deleteFile(activity,currentDrive,selectedItem);
                     dialog.dismiss();
                 }else if (value == DownloadSelect.Select.CANCEL){
                     dialog.dismiss();
@@ -67,6 +77,21 @@ public class DownloadDriveUtils {
             }
         }, Arrays.asList(selects),0);
         dialog.show();
+    }
+
+    private static void deleteFile(Activity activity,DriveFolderFile currentDrive,DriveFolderFile selectedItem) {
+        if (currentDrive.getDriveType() == StorageDriveType.TYPE.LOCAL){
+            boolean res = FileUtils.delFile(new File(currentDrive.name + selectedItem.getAccessingPathStr() + selectedItem.name));
+            EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_FILE_CHANGE));
+            if (res){
+                Toast.makeText(activity, "删除完成！", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(activity, "删除失败！", Toast.LENGTH_SHORT).show();
+            }
+
+        }else {
+            Toast.makeText(activity, "建设中...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private static void downloadFile(Activity activity,DriveFolderFile currentDrive, DriveFolderFile selectedItem) {
@@ -140,13 +165,38 @@ public class DownloadDriveUtils {
     }
 
     public static DownloadDialog downloadDialog;
+    public static Thread thread;
+    public static String root = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static void startDownload(Activity activity, DriveFolderFile currentDrive, String url, String savePath){
 
         downloadDialog = new DownloadDialog(activity, "下载文件", "下载地址： " + url, "正在准备下载..." );
         downloadDialog.show();
-        new Thread(){
+        downloadDialog.setOnClickListner(new DownloadDialog.OnListener() {
+            @Override
+            public void left() {
+                if (isDone){
+                    openFile(activity,currentDrive,selectedItemD);
+                    downloadDialog.dismiss();
+                }else {
+                    Toast.makeText(activity,"文件暂未下载完成，请等待下载完成!",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void right() {
+                if (isDone){
+
+                }else {
+                    FileUtils.delFile(new File(root + "/tvbox/Download",FileUtils.getFileName(url)));
+                }
+                downloadDialog.dismiss();
+            }
+        });
+        thread = new Thread(){
             @Override
             public void run() {
+                isDone = false;
                 JsonObject config = currentDrive.getConfig();
                 WebDav webDav = new WebDav();
                 if (config.has("username") && config.has("password")) {
@@ -170,18 +220,6 @@ public class DownloadDriveUtils {
                     filename = new File(savePath);
                 }
 
-
-                downloadDialog.setOnClickListner(new DownloadDialog.OnListener() {
-                    @Override
-                    public void left() {
-                        downloadDialog.dismiss();
-                    }
-
-                    @Override
-                    public void right() {
-                        downloadDialog.dismiss();
-                    }
-                });
 
                 try {
                     // 1K的数据缓冲
@@ -217,16 +255,19 @@ public class DownloadDriveUtils {
                     os.close();
                     is.close();
                     Message msg1 = new Message();
+                    isDone = true;
                     msg1.what = 1;
                     updateDialoghandler.sendMessage(msg1);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Message msg = new Message();
                     msg.what = 2;
+                    isDone = false;
                     updateDialoghandler.sendMessage(msg);
                 }
             }
-        }.start();
+        };
+        thread.start();
 
     }
 
@@ -265,4 +306,8 @@ public class DownloadDriveUtils {
         musicDialog.playSong(activity,config.get("url").getAsString() + targetPath,viewModelD,selectedItem);
         musicDialog.show();
     }
+
+
+
+
 }

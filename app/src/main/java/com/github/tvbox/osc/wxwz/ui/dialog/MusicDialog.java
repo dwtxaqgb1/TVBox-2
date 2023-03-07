@@ -215,8 +215,11 @@ public class MusicDialog extends BaseDialog {
         mediaPlayer.setLooping(false);
 
         if(songPath.startsWith("http")){
-            if (FileUtils.isFileExists(FileUtils.getFileName(songPath))){
-                songPath = FileUtils.getMusicCacheFile(FileUtils.getFileName(songPath));
+            if (FileUtils.isFileExists(FileUtils.getFileName(songPath),"")){
+                songPath = FileUtils.getMusicCacheFile(FileUtils.getFileName(songPath),"");
+            }else if (FileUtils.isFileExists(FileUtils.getFileName(songPath),"/tvbox/Download")){
+                songPath = FileUtils.getMusicCacheFile(FileUtils.getFileName(songPath),"/tvbox/Download");
+                Log.e("wxwz","歌曲地址:" + songPath);
             }
         }
         if (songPath.startsWith("http")) {

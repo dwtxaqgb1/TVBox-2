@@ -99,6 +99,7 @@ public class DriveActivity extends BaseActivity {
     public static List<DriveFolderFile> driveFolderFileList = new ArrayList<>();
 
     private Handler mHandler = new Handler();
+    private DriveFolderFile selectedItemPath;
 
     @Override
     protected int getLayoutResID() {
@@ -239,6 +240,7 @@ public class DriveActivity extends BaseActivity {
                 if (!selectedItem.isFile) {
                     viewModel.setCurrentDriveNote(selectedItem);
                     loadDriveData();
+                    selectedItemPath = selectedItem;
                 } else {
                     // takagen99 - To only play media file
                     if (StorageDriveType.isVideoType(selectedItem.fileType)) {
@@ -277,6 +279,7 @@ public class DriveActivity extends BaseActivity {
                         }
                     } else {
                         DownloadDriveUtils.downloadSelect(DriveActivity.this,viewModel,selectedItem);
+
                     }
 
                 }
@@ -562,6 +565,11 @@ public class DriveActivity extends BaseActivity {
         if (event.type == RefreshEvent.TYPE_DRIVE_REFRESH) {
             drives = null;
             initData();
+        }else if (event.type == RefreshEvent.TYPE_FILE_CHANGE){
+
+            viewModel.setCurrentDriveNote(selectedItemPath);
+            loadDriveData();
+            adapter.notifyDataSetChanged();
         }
     }
 

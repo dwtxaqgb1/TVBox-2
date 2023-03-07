@@ -120,9 +120,15 @@ public class FileUtils {
 		return size;
 	}
 
-	public static boolean isFileExists(String path){
+	public static boolean isFileExists(String path,String oldpath){
 		String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-		File file = new File(root + "/tvbox/.cache/Music");
+		File file =null;
+		if (oldpath.equals("")){
+			file = new File(root + "/tvbox/.cache/Music");
+		}else {
+			file = new File(root + oldpath);
+		}
+
 		if (!file.exists())
 			file.mkdirs();
 		File filename = new File(file, path);
@@ -133,9 +139,15 @@ public class FileUtils {
 		}
 	}
 
-	public static String getMusicCacheFile(String path){
+	public static String getMusicCacheFile(String path,String rootFile){
 		String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-		File file = new File(root + "/tvbox/.cache/Music");
+		File file;
+		if (rootFile.equals("")){
+			file = new File(root + "/tvbox/.cache/Music");
+		}else {
+			file = new File(root + rootFile);
+		}
+
 		if (!file.exists())
 			file.mkdirs();
 		File filename = new File(file, path);

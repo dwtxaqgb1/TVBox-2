@@ -28,13 +28,19 @@ public class DownloadDialog extends BaseDialog {
         leftBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onListener.left();
+                if (onListener!=null){
+                    onListener.left();
+                }
+
             }
         });
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onListener.right();
+                if (onListener!=null){
+                    onListener.right();
+                }
+
             }
         });
 

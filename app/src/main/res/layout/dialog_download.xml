@@ -89,7 +89,7 @@
             android:paddingRight="@dimen/vs_25"
             android:paddingTop="@dimen/vs_10"
             android:paddingBottom="@dimen/vs_10"
-            android:text="确定"
+            android:text="打开文件"
             android:textColor="@color/color_FFFFFF"
             android:textSize="@dimen/ts_22" />
 
