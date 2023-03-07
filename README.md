@@ -3,14 +3,14 @@
 更新日志:
 
 界面优化
-更改缓存位置tvbox/cache
-更改备份位置tvbox/backup
-添加webdav文件下载
-添加搜索历史
-添加本地apk安装
-优化MusicDialog(只是能用的阶段，代码杂乱，修复某些闪退的Bug)
-增加歌词显示(MusicDialog只针对本地以及WebDav)
-同步源码(来自takagen99)更新
+-更改缓存位置tvbox/cache
+-更改备份位置tvbox/backup
+-添加webdav文件下载
+-添加搜索历史
+-添加本地apk安装
+-优化MusicDialog(只是能用的阶段，代码杂乱，修复某些闪退的Bug)
+-增加歌词显示(MusicDialog只针对本地以及WebDav)
+-同步源码(来自takagen99)更新
 
 === Source Code - Editing the app default settings ===
 /src/main/java/com/github/tvbox/osc/base/App.java
