@@ -1,5 +1,7 @@
 package com.github.tvbox.osc.wxwz.ui.dialog;
 
+import static com.github.tvbox.osc.wxwz.util.DownloadDriveUtils.thread;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +28,7 @@ import com.github.tvbox.osc.ui.dialog.BaseDialog;
 import com.github.tvbox.osc.util.StorageDriveType;
 import com.github.tvbox.osc.viewmodel.drive.AbstractDriveViewModel;
 import com.github.tvbox.osc.wxwz.entity.LrcEntry;
+import com.github.tvbox.osc.wxwz.util.DownloadDriveUtils;
 import com.github.tvbox.osc.wxwz.util.LrcUtils;
 import com.github.tvbox.osc.wxwz.util.okhttp.BasicAuthInterceptor;
 import com.github.tvbox.osc.wxwz.util.FileUtils;
@@ -86,6 +89,7 @@ public class MusicDialog extends BaseDialog {
     private boolean isLyric = false;
     private List<LrcEntry> mainList = new ArrayList<>();
     private int currentLyricIndex = 0;
+    private String songUrl = "";
 
     public MusicDialog(@NonNull Context context) {
         super(context);
@@ -197,6 +201,7 @@ public class MusicDialog extends BaseDialog {
     }
 
     public void playSong(Context context, String songPath, AbstractDriveViewModel viewModel, DriveFolderFile selectedItem) {
+        songUrl = songPath;
         currentLyricIndex = 0;
         if (this.viewModel == null) {
             this.viewModel = viewModel;
@@ -633,6 +638,10 @@ public class MusicDialog extends BaseDialog {
         if (thread != null) {
             thread.interrupt();
             thread = null;
+        }
+
+        if (!loadFinish&&songUrl.startsWith("http")){
+            FileUtils.delFile(new File(DownloadDriveUtils.root + "/tvbox/.cache/Music",FileUtils.getFileName(songUrl)));
         }
         super.dismiss();
     }

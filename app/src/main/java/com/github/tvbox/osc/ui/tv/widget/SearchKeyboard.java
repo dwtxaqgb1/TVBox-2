@@ -88,10 +88,6 @@ public class SearchKeyboard extends FrameLayout {
         adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                /*if (position == 0)
-                    return 3;
-                else if (position == 1)
-                    return 3;*/
                 return 1;
             }
         });

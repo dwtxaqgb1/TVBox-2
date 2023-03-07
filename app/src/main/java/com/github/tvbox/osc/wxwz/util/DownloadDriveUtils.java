@@ -171,6 +171,8 @@ public class DownloadDriveUtils {
 
         downloadDialog = new DownloadDialog(activity, "下载文件", "下载地址： " + url, "正在准备下载..." );
         downloadDialog.show();
+        downloadDialog.setUrl(url);
+        downloadDialog.setIsDone(false);
         downloadDialog.setOnClickListner(new DownloadDialog.OnListener() {
             @Override
             public void left() {
@@ -251,7 +253,6 @@ public class DownloadDriveUtils {
                         per.arg1 = (int) (hasRead * 1.0f / total * 100);
                         updateDialoghandler.sendMessage(per);
 
-
                     }
                     // 完毕，关闭所有链接
                     downloadDialog.setDownloadProgress(100);
@@ -283,10 +284,12 @@ public class DownloadDriveUtils {
             {
                 case 1:
                     downloadDialog.setDownloadResult("下载成功！");
+                    downloadDialog.setIsDone(true);
                     downloadDialog.setDownloadPercent(100);
                     break;
                 case 2:
                     downloadDialog.setDownloadResult("下载失败！");
+                    downloadDialog.setIsDone(false);
                     break;
                 case 3:
                     downloadDialog.setDownloadResult("下载中," + "文件大小：" + msg.obj);

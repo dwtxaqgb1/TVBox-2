@@ -1,6 +1,9 @@
 package com.github.tvbox.osc.wxwz.ui.dialog;
 
+import static com.github.tvbox.osc.wxwz.util.DownloadDriveUtils.thread;
+
 import android.content.Context;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -9,6 +12,9 @@ import androidx.annotation.NonNull;
 
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.ui.dialog.BaseDialog;
+import com.github.tvbox.osc.wxwz.util.FileUtils;
+
+import java.io.File;
 
 public class DownloadDialog extends BaseDialog {
     private TextView downloadTitle;
@@ -19,6 +25,9 @@ public class DownloadDialog extends BaseDialog {
     private TextView leftBtn;
     private TextView rightBtn;
     public OnListener onListener;
+    private String url = "";
+    private boolean isDone = false;
+    public String root = Environment.getExternalStorageDirectory().getAbsolutePath();
 
     public DownloadDialog(@NonNull Context context,String title,String info,String result) {
         super(context);
@@ -87,6 +96,14 @@ public class DownloadDialog extends BaseDialog {
         this.downloadPercent.setText(percent + "%");
     }
 
+    public void setUrl(String url){
+        this.url = url;
+    }
+
+    public void setIsDone(boolean isDone){
+        this.isDone = isDone;
+    }
+
     public void setOnClickListner(OnListener listener){
         this.onListener = listener;
     }
@@ -98,5 +115,17 @@ public class DownloadDialog extends BaseDialog {
 
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        if (isDone){
+            if (thread!=null||thread.isAlive())
+                thread.interrupt();
+        }else {
+            if (thread!=null||thread.isAlive())
+                thread.interrupt();
+            FileUtils.delFile(new File(root + "/tvbox/Download",FileUtils.getFileName(url)));
+        }
 
+    }
 }
