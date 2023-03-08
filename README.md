@@ -19,6 +19,8 @@ UI&功能
 ![下载](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/download.png)
 ![音乐](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/music.png)
 
+Bug反馈
+- 有我修改的Bug，请在Issues反馈，当然如果我没有修改的部分依然可以反馈（会试着修复）
 
 === Source Code - Editing the app default settings ===
 /src/main/java/com/github/tvbox/osc/base/App.java
