@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import com.github.catvod.crawler.JarLoader;
 import com.github.catvod.crawler.JsLoader;
@@ -63,7 +64,7 @@ public class ApiConfig {
     private List<String> vipParseFlags;
     private List<IJKCode> ijkCodes;
     private String spider = null;
-    public String wallpaper = "";
+    public String wallpaper = "https://tool.pikawz.top/tools/rdwallpaper";
 
     private final SourceBean emptyHome = new SourceBean();
 
@@ -308,7 +309,24 @@ public class ApiConfig {
         // spider
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
-        wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+
+        if (Hawk.get(HawkConfig.THEME_WALLPAPER_URL,"").equals("")){
+            wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+
+        }else {
+            wallpaper = Hawk.get(HawkConfig.THEME_WALLPAPER_URL,DefaultConfig.safeJsonString(infoJson, "wallpaper", ""));
+
+
+        }
+        ArrayList<String> Thhistory = Hawk.get(HawkConfig.THEME_WALLPAPER_URL_HISTORY, new ArrayList<String>());
+        if (!Thhistory.contains(ApiConfig.get().wallpaper))
+            Thhistory.add(0, ApiConfig.get().wallpaper);
+        if (Thhistory.size() > 20)
+            Thhistory.remove(20);
+        Hawk.put(HawkConfig.THEME_WALLPAPER_URL_HISTORY, Thhistory);
+        Log.e("wxzw","API : "  + wallpaper);
+
+
         // 远端站点源
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {

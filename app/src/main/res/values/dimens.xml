@@ -80,4 +80,7 @@
     <dimen name="dp_1">1.0dip</dimen>
     <dimen name="vs_22.5">22.5mm</dimen>
     <dimen name="vs_18">18mm</dimen>
+    <dimen name="vs_32">32mm</dimen>
+    <dimen name="vs_64">64mm</dimen>
+    <dimen name="vs_36">36mm</dimen>
 </resources>

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.PermissionChecker;
 
 import com.github.tvbox.osc.R;
+import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.util.AppManager;
@@ -317,6 +318,26 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             getWindow().setBackgroundDrawable(globalWp);
             return;
         }
+        if (!ApiConfig.get().wallpaper.startsWith("http")&&Hawk.get(HawkConfig.THEME_WALLPAPER,1)==0){
+            File wp = new File(ApiConfig.get().wallpaper);
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(wp.getAbsolutePath(), opts);
+            // 从Options中获取图片的分辨率
+            int imageHeight = opts.outHeight;
+            int imageWidth = opts.outWidth;
+            int picHeight = 720;
+            int picWidth = 1080;
+            int scaleX = imageWidth / picWidth;
+            int scaleY = imageHeight / picHeight;
+            int scale = Math.max(Math.max(scaleX, scaleY), 1);
+            opts.inJustDecodeBounds = false;
+            // 采样率
+            opts.inSampleSize = scale;
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(BitmapFactory.decodeFile(wp.getAbsolutePath(), opts));
+            getWindow().setBackgroundDrawable(bitmapDrawable);
+            return;
+        }
         try {
             File wp = new File(getFilesDir().getAbsolutePath() + "/wp");
             if (wp.exists()) {
@@ -345,7 +366,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         if (globalWp != null) {
             getWindow().setBackgroundDrawable(globalWp);
         } else {
-            getWindow().setBackgroundDrawableResource(R.drawable.app_bg);
+            if (Hawk.get(HawkConfig.THEME_WALLPAPER,1)==1){
+                getWindow().setBackgroundDrawableResource(R.drawable.app_bg);
+            }else if (Hawk.get(HawkConfig.THEME_WALLPAPER,1)==2){
+                getWindow().setBackgroundDrawableResource(R.drawable.app_bg2);
+            }else if (Hawk.get(HawkConfig.THEME_WALLPAPER,1)==3){
+                getWindow().setBackgroundDrawableResource(R.drawable.app_bg3);
+            }
         }
+
     }
 }

@@ -353,6 +353,16 @@
                 android:src="@drawable/play_pause" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_ddtap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_player_tap"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <LinearLayout
@@ -1112,16 +1122,6 @@
                 android:textSize="@dimen/ts_20"
                 android:textStyle="bold" />
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_ddtap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_player_tap"
-        android:orientation="horizontal"
-        android:visibility="invisible" >
 
     </LinearLayout>
 
