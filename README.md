@@ -12,6 +12,14 @@
 - 增加歌词显示(MusicDialog只针对本地以及WebDav)
 - 同步源码(来自takagen99)更新
 
+UI&功能
+![主页](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/home.png)
+![搜索](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/search.png)
+![主题](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/theme.png)
+![下载](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/download.png)
+![音乐](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/music.png)
+
+
 === Source Code - Editing the app default settings ===
 /src/main/java/com/github/tvbox/osc/base/App.java
 
