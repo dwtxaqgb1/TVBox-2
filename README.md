@@ -10,7 +10,7 @@
 - 添加本地apk安装
 - 优化MusicDialog(只是能用的阶段，代码杂乱，修复某些闪退的Bug)
 - 增加歌词显示(MusicDialog只针对本地以及WebDav)
-- 同步源码(来自takagen99)更新
+- 同步源码(来自takagen99，时间:Commits on Mar 7, 2023)更新
 
 UI&功能
 ![主页](https://ghproxy.com/https://raw.githubusercontent.com/wxwxwz/TVBox/master/pic/home.png)
