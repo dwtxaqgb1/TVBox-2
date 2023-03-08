@@ -30,8 +30,9 @@
 
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="false"
@@ -44,17 +45,6 @@
             android:textSize="@dimen/ts_30"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="@dimen/vs_0"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="left|center_vertical"
-            android:textAlignment="gravity"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/ts_30"
-            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/tvWifi"
